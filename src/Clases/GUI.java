@@ -10,7 +10,7 @@ public class GUI extends javax.swing.JFrame{
 
     ImagenNumero[] numeros = new ImagenNumero[18];
     ImagenNumero[] paraOrdenar;
-    //ImagenNumero[] ordenado;
+    boolean ordenado;
     HiloBubble hiloBubble;
     HiloShell hiloShell;
     HiloQuick hiloQuick;
@@ -24,6 +24,8 @@ public class GUI extends javax.swing.JFrame{
         shellSort.setEnabled(true);
         quickSort.setEnabled(true);
         unSort.setEnabled(true);
+
+        ordenado = false;
 
 
         this.setResizable(false);
@@ -172,41 +174,51 @@ public class GUI extends javax.swing.JFrame{
 
     private void quickSortActionPerformed(java.awt.event.ActionEvent evt) {
 
-        hiloQuick = new HiloQuick(paraOrdenar);
-        hiloQuick.start();
+        if(ordenado){
+            JOptionPane.showMessageDialog(null,"El arreglo ya está ordenado","Atención",JOptionPane.WARNING_MESSAGE);
+        }else {
 
-        bubbleSort.setEnabled(false);
-        shellSort.setEnabled(false);
-        quickSort.setEnabled(false);
-        unSort.setEnabled(false);
-        botonMillon.setEnabled(false);
+            hiloQuick = new HiloQuick(paraOrdenar);
+            hiloQuick.start();
 
+            bubbleSort.setEnabled(false);
+            shellSort.setEnabled(false);
+            quickSort.setEnabled(false);
+            unSort.setEnabled(false);
+            botonMillon.setEnabled(false);
+        }
     }
 
     private void shellSortActionPerformed(java.awt.event.ActionEvent evt) {
 
-        //Shell(paraOrdenar);
-        hiloShell = new HiloShell(paraOrdenar);
-        hiloShell.start();
+        if(ordenado){
+            JOptionPane.showMessageDialog(null,"El arreglo ya está ordenado","Atención",JOptionPane.WARNING_MESSAGE);
+        }else {
+            hiloShell = new HiloShell(paraOrdenar);
+            hiloShell.start();
 
-        bubbleSort.setEnabled(false);
-        shellSort.setEnabled(false);
-        quickSort.setEnabled(false);
-        unSort.setEnabled(false);
-        botonMillon.setEnabled(false);
-
+            bubbleSort.setEnabled(false);
+            shellSort.setEnabled(false);
+            quickSort.setEnabled(false);
+            unSort.setEnabled(false);
+            botonMillon.setEnabled(false);
+        }
     }
 
     private void bubbleSortActionPerformed(java.awt.event.ActionEvent evt) {
 
-        hiloBubble = new HiloBubble();
-        hiloBubble.start();
+        if(ordenado){
+            JOptionPane.showMessageDialog(null,"El arreglo ya está ordenado","Atención",JOptionPane.WARNING_MESSAGE);
+        }else {
+            hiloBubble = new HiloBubble();
+            hiloBubble.start();
 
-        bubbleSort.setEnabled(false);
-        shellSort.setEnabled(false);
-        quickSort.setEnabled(false);
-        unSort.setEnabled(false);
-        botonMillon.setEnabled(false);
+            bubbleSort.setEnabled(false);
+            shellSort.setEnabled(false);
+            quickSort.setEnabled(false);
+            unSort.setEnabled(false);
+            botonMillon.setEnabled(false);
+        }
 
     }
 
@@ -217,11 +229,18 @@ public class GUI extends javax.swing.JFrame{
         quickSort.setEnabled(true);
         unSort.setEnabled(true);
         botonMillon.setEnabled(true);
+        ordenado = false;
     }
 
     private void botonMillonActionPerformed(java.awt.event.ActionEvent evt) {
 
-        bubbleMillon();
+        int seleccion = JOptionPane.showConfirmDialog(null,"Esta función requiere mucho proceso. \n" +
+                "Se trata de ordenar un millón de números ordenados de con BubbleSort.\n" +
+                "¿Desea continuar?","¡Alerta!",JOptionPane.YES_NO_OPTION,JOptionPane.WARNING_MESSAGE);
+
+        if(seleccion == 0) {
+            bubbleMillon();
+        }
     }
 
     public class HiloBubble extends Thread {
@@ -246,6 +265,7 @@ public class GUI extends javax.swing.JFrame{
                 quickSort.setEnabled(true);
                 unSort.setEnabled(true);
                 botonMillon.setEnabled(true);
+                ordenado = true;
                 this.stop();
                 x = 0;
 
@@ -305,6 +325,7 @@ public class GUI extends javax.swing.JFrame{
                 quickSort.setEnabled(true);
                 unSort.setEnabled(true);
                 botonMillon.setEnabled(true);
+                ordenado = true;
                 this.stop();
             }catch (Exception e){}
         }
@@ -332,6 +353,8 @@ public class GUI extends javax.swing.JFrame{
             quickSort.setEnabled(true);
             unSort.setEnabled(true);
             botonMillon.setEnabled(true);
+
+            ordenado = true;
 
             this.stop();
         }
@@ -435,16 +458,17 @@ public class GUI extends javax.swing.JFrame{
         int aux;
         Random generador = new Random();
 
-        for (int i = 0; i < A.length-1; i++) {
-            A[i] = generador.nextInt(1000);
-        }
-
-        int x = 0, j = 0;
         bubbleSort.setEnabled(false);
         shellSort.setEnabled(false);
         quickSort.setEnabled(false);
         unSort.setEnabled(false);
         botonMillon.setEnabled(false);
+
+        for (int i = 0; i < A.length-1; i++) {
+            A[i] = generador.nextInt(1000);
+        }
+
+        int x = 0, j = 0;
 
         do {
 
@@ -464,7 +488,7 @@ public class GUI extends javax.swing.JFrame{
         while (x<A.length-1);
 
         for (int i = 0; i < 200; i++) {
-            System.out.print(A[i] + ", ");
+            System.out.print(A[i] + "\n");
         }
 
         bubbleSort.setEnabled(true);
@@ -477,11 +501,6 @@ public class GUI extends javax.swing.JFrame{
 
 
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
-         */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
