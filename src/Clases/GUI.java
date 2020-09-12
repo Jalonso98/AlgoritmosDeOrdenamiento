@@ -13,6 +13,7 @@ public class GUI extends javax.swing.JFrame{
     //ImagenNumero[] ordenado;
     HiloBubble hiloBubble;
     HiloShell hiloShell;
+    HiloQuick hiloQuick;
 
     public GUI() {
         initComponents();
@@ -31,6 +32,7 @@ public class GUI extends javax.swing.JFrame{
         this.setLocationRelativeTo(null);
         this.setTitle("Algoritmos de ordenamiento");
         this.setLayout(null);
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
     public void llenarArreglo() {
@@ -170,6 +172,14 @@ public class GUI extends javax.swing.JFrame{
 
     private void quickSortActionPerformed(java.awt.event.ActionEvent evt) {
 
+        hiloQuick = new HiloQuick(paraOrdenar);
+        hiloQuick.start();
+
+        bubbleSort.setEnabled(false);
+        shellSort.setEnabled(false);
+        quickSort.setEnabled(false);
+        unSort.setEnabled(false);
+        botonMillon.setEnabled(false);
 
     }
 
@@ -301,6 +311,82 @@ public class GUI extends javax.swing.JFrame{
     }
 
     public class HiloQuick extends Thread{
+
+        ImagenNumero [] A;
+
+        public HiloQuick(ImagenNumero [] nums){
+            A = nums;
+        }
+
+        public void run() {
+            bubbleSort.setEnabled(false);
+            shellSort.setEnabled(false);
+            quickSort.setEnabled(false);
+            unSort.setEnabled(false);
+            botonMillon.setEnabled(false);
+
+            quickSort(A);
+
+            bubbleSort.setEnabled(true);
+            shellSort.setEnabled(true);
+            quickSort.setEnabled(true);
+            unSort.setEnabled(true);
+            botonMillon.setEnabled(true);
+
+            this.stop();
+        }
+
+        public ImagenNumero[] quickSort(ImagenNumero A[]) {
+            return quickSort(A, 0, A.length - 1);
+
+        }
+
+        public ImagenNumero[] quickSort(ImagenNumero A[], int izq, int der) {
+
+            if (izq >= der) {
+                return A;
+            }
+            int i = izq;
+            int d = der;
+            if (izq != der) {
+                int pivote;
+                ImagenNumero aux;
+                pivote = izq;
+
+                while (izq != der) {
+
+                    try {
+                        Mostrar();
+
+                        while (A[der].getValor() >= A[pivote].getValor() && izq < der) {
+                            der--;
+                        }
+                        while (A[izq].getValor() < A[pivote].getValor() && izq < der) {
+                            izq--;
+                        }
+
+                        if (der != izq) {
+                            aux = A[der];
+                            A[der] = A[pivote];
+                            A[izq] = aux;
+                            Mostrar(A);
+                            this.sleep(1000);
+                        }
+                        if (izq == der) {
+                            quickSort(A, i, izq - 1);
+                            quickSort(A, izq + 1, d);
+                        }
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                }
+            } else {
+                return A;
+            }
+            return A;
+
+        }
 
     }
 
